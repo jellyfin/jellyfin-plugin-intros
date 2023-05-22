@@ -56,13 +56,14 @@ public class IntroProvider : IIntroProvider
 
     private static string introsPath => LocalIntrosPlugin.Instance.Configuration.Local;
 
-    private (HashSet<string> tags, HashSet<string> genres, HashSet<string> studios, DateTime now) GetCriteriaList(BaseItem item)
+    private (HashSet<string> tags, HashSet<string> genres, HashSet<string> studios, DateTime now, DateTime premiereDate) GetCriteriaList(BaseItem item)
     {
         switch (item.GetBaseItemKind())
         {
             case Data.Enums.BaseItemKind.Movie:
                 var movie = item as Movie;
-                return (movie.Tags.ToHashSet(),movie.Genres.ToHashSet(),movie.Studios.ToHashSet(), DateTime.Now);
+                
+                return (movie.Tags.ToHashSet(),movie.Genres.ToHashSet(),movie.Studios.ToHashSet(), DateTime.Now, item.PremiereDate ?? DateTime.Today);
             case Data.Enums.BaseItemKind.Episode:
                 var episode = item as Episode;
                 var season = episode.Season;
@@ -71,11 +72,12 @@ public class IntroProvider : IIntroProvider
                     episode.Tags.Concat(season.Tags).Concat(series.Tags).ToHashSet(),
                     episode.Genres.Concat(season.Genres).Concat(series.Genres).ToHashSet(),
                     episode.Studios.Concat(season.Studios).Concat(series.Studios).ToHashSet(),
-                    DateTime.Now
+                    DateTime.Now, 
+                    episode.PremiereDate ?? season.PremiereDate ?? series.PremiereDate ?? DateTime.Today
                 );
         }
         var emp = new HashSet<string>();
-        return (emp,emp,emp, DateTime.Now);
+        return (emp,emp,emp, DateTime.Now, DateTime.Today);
     }
 
     private IEnumerable<IntroInfo> Local(BaseItem item)
@@ -93,12 +95,13 @@ public class IntroProvider : IIntroProvider
             throw new Exception("No intros found in library");
         }
 
-        var (tags, genres, studios, now) = GetCriteriaList(item);
+        var (tags, genres, studios, now, premiereDate) = GetCriteriaList(item);
 
         var validTagIntros = LocalIntrosPlugin.Instance.Configuration.TagIntros.Where(t => tags.Any(x => x.Equals(t.TagName, StringComparison.OrdinalIgnoreCase)));
         var validGenreIntros = LocalIntrosPlugin.Instance.Configuration.GenreIntros.Where(g => genres.Any(x => x.Equals(g.GenreName, StringComparison.OrdinalIgnoreCase)));
         var validStudioIntros = LocalIntrosPlugin.Instance.Configuration.StudioIntros.Where(s => studios.Any(x => x.Equals(s.StudioName, StringComparison.OrdinalIgnoreCase)));
         var validCurrentDateIntros = LocalIntrosPlugin.Instance.Configuration.CurrentDateIntros.Where(d => d.IsDateInRange(now));
+        var validReleaseDateIntros = LocalIntrosPlugin.Instance.Configuration.PremiereDateIntros.Where(d => d.IsDateInRange(premiereDate));
         
         FancyList<ISpecialIntro> selectableIntros = new FancyList<ISpecialIntro>();
         

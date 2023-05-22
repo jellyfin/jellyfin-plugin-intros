@@ -15,7 +15,8 @@ public class IntroPluginConfiguration : BasePluginConfiguration
     public List<TagIntro> TagIntros { get; set; } = new List<TagIntro>();
     public List<GenreIntro> GenreIntros { get; set; } = new List<GenreIntro>();
     public List<StudioIntro> StudioIntros { get; set; } = new List<StudioIntro>();
-    public List<CurrentDateRangeIntro> CurrentDateIntros { get; set; } = new List<CurrentDateRangeIntro>();
+    public List<DateRangeIntro> CurrentDateIntros { get; set; } = new List<DateRangeIntro>();
+    public List<DateRangeIntro> PremiereDateIntros { get; set; } = new List<DateRangeIntro>();
 
 }
 
@@ -40,7 +41,7 @@ public class TagIntro : ISpecialIntro
     public int Precedence { get; set; }
     public int Prevalence { get; set; }
 }
-public class CurrentDateRangeIntro : ISpecialIntro
+public class DateRangeIntro : ISpecialIntro
 {
     public Guid IntroId { get; set; }
     public DateTime DateStart { get; set; }
@@ -48,19 +49,19 @@ public class CurrentDateRangeIntro : ISpecialIntro
     public int Precedence { get; set; }
     public int Prevalence { get; set; }
     public CurrentDateRepeatRangeType RepeatType { get; set; } = CurrentDateRepeatRangeType.None;
-    public bool IsDateInRange(DateTime currentDate)
+    public bool IsDateInRange(DateTime relevantDate)
     {
         switch (RepeatType)
         {
             case CurrentDateRepeatRangeType.None:
-                return currentDate >= DateStart && currentDate <= DateEnd;
+                return relevantDate >= DateStart && relevantDate <= DateEnd;
             case CurrentDateRepeatRangeType.Weekly:
-                return currentDate.DayOfWeek >= DateStart.DayOfWeek && currentDate.DayOfWeek <= DateEnd.DayOfWeek;
+                return relevantDate.DayOfWeek >= DateStart.DayOfWeek && relevantDate.DayOfWeek <= DateEnd.DayOfWeek;
             case CurrentDateRepeatRangeType.Monthly:
-                return currentDate.Day >= DateStart.Day && currentDate.Day <= DateEnd.Day;
+                return relevantDate.Day >= DateStart.Day && relevantDate.Day <= DateEnd.Day;
             case CurrentDateRepeatRangeType.Yearly:
-                var currentYear = currentDate.Year;
-                var pretendCurrentDate = new DateTime(currentYear, currentDate.Month, currentDate.Day);
+                var currentYear = relevantDate.Year;
+                var pretendCurrentDate = new DateTime(currentYear, relevantDate.Month, relevantDate.Day);
                 var pretendDateEnd = new DateTime(currentYear, DateEnd.Month, DateEnd.Day);
                 var pretendDateStart = new DateTime(currentYear, DateStart.Month, DateStart.Day);
                 return pretendCurrentDate >= pretendDateStart && pretendCurrentDate <= pretendDateEnd;
