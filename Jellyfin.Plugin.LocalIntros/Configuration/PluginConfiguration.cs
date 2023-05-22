@@ -47,6 +47,34 @@ public class CurrentDateRangeIntro : ISpecialIntro
     public DateTime DateEnd { get; set; }
     public int Precedence { get; set; }
     public int Prevalence { get; set; }
+    public CurrentDateRepeatRangeType RepeatType { get; set; } = CurrentDateRepeatRangeType.None;
+    public bool IsDateInRange(DateTime currentDate)
+    {
+        switch (RepeatType)
+        {
+            case CurrentDateRepeatRangeType.None:
+                return currentDate >= DateStart && currentDate <= DateEnd;
+            case CurrentDateRepeatRangeType.Weekly:
+                return currentDate.DayOfWeek >= DateStart.DayOfWeek && currentDate.DayOfWeek <= DateEnd.DayOfWeek;
+            case CurrentDateRepeatRangeType.Monthly:
+                return currentDate.Day >= DateStart.Day && currentDate.Day <= DateEnd.Day;
+            case CurrentDateRepeatRangeType.Yearly:
+                var currentYear = currentDate.Year;
+                var pretendCurrentDate = new DateTime(currentYear, currentDate.Month, currentDate.Day);
+                var pretendDateEnd = new DateTime(currentYear, DateEnd.Month, DateEnd.Day);
+                var pretendDateStart = new DateTime(currentYear, DateStart.Month, DateStart.Day);
+                return pretendCurrentDate >= pretendDateStart && pretendCurrentDate <= pretendDateEnd;
+            default:
+                throw new ArgumentOutOfRangeException($"RepeatType Invalid: {RepeatType}");
+        }
+    }
+}
+public enum CurrentDateRepeatRangeType
+{
+    None,
+    Weekly,
+    Monthly,
+    Yearly
 }
 public class GenreIntro : ISpecialIntro
 {

@@ -98,7 +98,7 @@ public class IntroProvider : IIntroProvider
         var validTagIntros = LocalIntrosPlugin.Instance.Configuration.TagIntros.Where(t => tags.Any(x => x.Equals(t.TagName, StringComparison.OrdinalIgnoreCase)));
         var validGenreIntros = LocalIntrosPlugin.Instance.Configuration.GenreIntros.Where(g => genres.Any(x => x.Equals(g.GenreName, StringComparison.OrdinalIgnoreCase)));
         var validStudioIntros = LocalIntrosPlugin.Instance.Configuration.StudioIntros.Where(s => studios.Any(x => x.Equals(s.StudioName, StringComparison.OrdinalIgnoreCase)));
-        var validDateIntros = LocalIntrosPlugin.Instance.Configuration.CurrentDateIntros.Where(d => now.Date <= d.DateEnd && now.Date >= d.DateStart);
+        var validCurrentDateIntros = LocalIntrosPlugin.Instance.Configuration.CurrentDateIntros.Where(d => d.IsDateInRange(now));
         
         FancyList<ISpecialIntro> selectableIntros = new FancyList<ISpecialIntro>();
         
@@ -106,7 +106,7 @@ public class IntroProvider : IIntroProvider
         selectableIntros += validTagIntros;
         selectableIntros += validGenreIntros;
         selectableIntros += validStudioIntros;
-        selectableIntros += validDateIntros;
+        selectableIntros += validCurrentDateIntros;
         
 
         FancyList<Guid> randomIntros = new();
