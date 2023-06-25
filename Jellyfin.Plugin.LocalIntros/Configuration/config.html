@@ -81,6 +81,22 @@
                         <div class="fieldDescription">How important is the rule. If multiple rules both apply, only the ones with the highest equal precendence will be used for calculations.</div>
                     </div>
                     
+                    
+                    <div class="inputContainer" id="precedenceSection">
+                        <label class="inputLabel inputLabelUnfocused" for="rulePrecedence">For Movies</label>
+                        <input type="checkbox" is="emby-checkbox" id="chkForMovies" />
+                        <div class="fieldDescription">Does this rule apply to movies?</div>
+                    </div>
+                    
+                    
+                    <div class="inputContainer" id="precedenceSection">
+                        <label class="inputLabel inputLabelUnfocused" for="chkForShows">For Shows</label>
+                        <input type="checkbox" is="emby-checkbox" id="chkForShows" />
+                        <div class="fieldDescription">Does this rule apply to TV shows??</div>
+                    </div>
+                    
+                    
+                    
                     <div class="inputContainer">
                         <button id="addRuleBtn" is="emby-button" type="button" class="raised button-submit block emby-button">
                             <span>Add</span>
@@ -108,6 +124,12 @@
                                 </th>
                                 <th scope="col" class="detailTableHeaderCell">
                                     Prevalence
+                                </th>
+                                <th scope="col" class="detailTableHeaderCell">
+                                    For Movies
+                                </th>
+                                <th scope="col" class="detailTableHeaderCell">
+                                    For Shows
                                 </th>
                                 <th scope="col" class="detailTableHeaderCell">
                                 </th>
@@ -225,44 +247,52 @@
                     ApiClient.ajax({ type: 'POST', url, data, contentType: 'application/json' }).then(() => {loadPage()}).catch(ev => alert(ev));
                 }
 
-                var addTagIntroRule = (introId, precedence, prevalence) => 
+                var addTagIntroRule = (introId, precedence, prevalence, forMovies, forShows) => 
                 {
                     var tagRule = {
                         IntroId: introId,
                         TagName: $('#tagSelection').val(),
                         Precedence: precedence,
-                        Prevalence: prevalence
+                        Prevalence: prevalence,
+                        ForMovies: forMovies,
+                        ForShows: forShows
                     };
                     localIntroConfig.TagIntros.push(tagRule);
                 };
-                var addGenreIntroRule = (introId, precedence, prevalence) => 
+                var addGenreIntroRule = (introId, precedence, prevalence, forMovies, forShows) => 
                 {
                     var genreRule = {
                         IntroId: introId,
                         GenreName: $('#genreSelection').val(),
                         Precedence: precedence,
-                        Prevalence: prevalence
+                        Prevalence: prevalence,
+                        ForMovies: forMovies,
+                        ForShows: forShows
                     };
                     localIntroConfig.GenreIntros.push(genreRule);
                 };
-                var addStudioIntroRule = (introId, precedence, prevalence) => 
+                var addStudioIntroRule = (introId, precedence, prevalence, forMovies, forShows) => 
                 {
                     var studioRule = {
                         IntroId: introId,
                         StudioName: $('#studioSelection').val(),
                         Precedence: precedence,
-                        Prevalence: prevalence
+                        Prevalence: prevalence,
+                        ForMovies: forMovies,
+                        ForShows: forShows
                     };
                     localIntroConfig.StudioIntros.push(studioRule);
                 };
-                var addCurrentDateIntroRule = (introId, precedence, prevalence) => 
+                var addCurrentDateIntroRule = (introId, precedence, prevalence, forMovies, forShows) => 
                 {
                     var currentDateRule = {
                         IntroId: introId,
                         DateStart: $('#currentDateStart').val(),
                         DateEnd: $('#currentDateEnd').val(),
                         Precedence: precedence,
-                        Prevalence: prevalence
+                        Prevalence: prevalence,
+                        ForMovies: forMovies,
+                        ForShows: forShows
                     };
                     localIntroConfig.CurrentDateIntros.push(currentDateRule);
                 };
@@ -383,6 +413,10 @@
                                         ).append(
                                         $('<td>').addClass('detailTableBodyCell').text(rule.prevalence)
                                         ).append(
+                                        $('<td>').addClass('detailTableBodyCell').text(rule.forMovies)
+                                        ).append(
+                                        $('<td>').addClass('detailTableBodyCell').text(rule.forShows)
+                                        ).append(
                                         $('<td>').addClass('detailTableBodyCell').append(
                                             $('<button>')
                                                 .addClass('raised button-submit block emby-button')
@@ -427,6 +461,8 @@
                     var introId = $('#videoSelection').val();
                     var rulePrecedence = $('#rulePrecedence').val() || 1;
                     var rulePrevalence = $('#rulePrevalence').val() || 1;
+                    var isForMovies = $('#chkForMovies').is(':checked');
+                    var isForShows = $('#chkForShows').is(':checked');
                     switch(ruleType) {
                         case 'tag':
                             addTagIntroRule(introId, rulePrecedence, rulePrevalence);
