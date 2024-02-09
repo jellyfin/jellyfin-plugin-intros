@@ -11,6 +11,12 @@
                 <form id="configForm">
                     <p>Only videos from configured local storage are used. Some are available at <a is="emby-linkbutton" class="button-link emby-button" target="_blank" href="https://prerolls.video">the prerolls discord.</a>.</p>
                     <p>This was forked from <a is="emby-linkbutton" class="button-link emby-button" target="_blank" href="https://github.com/dkanada">dkanada</a>'s preroll plugin.</p>
+                    <div class="checkboxContainer checkboxContainer-withDescription">
+                        <label class="emby-checkbox-label">
+                            <input id="introsForMoviesOnly" type="checkbox" is="emby-checkbox" />
+                            <span>Only show intros for movies</span>
+                        </label>
+                    </div>
                     <div class="inputContainer">
                         <label class="inputLabel inputLabelUnfocused" for="local">Local Source</label>
                         <input id="local" is="emby-input" placeholder="/media/intros" />
@@ -20,11 +26,11 @@
                         <button id="loadVideosBtn" is="emby-button" type="button" class="raised button-submit block emby-button">
                             <span>Load Videos</span>
                         </button>
-                        
+
                         <button id="clearVideosBtn" is="emby-button" type="button" class="raised button-submit block emby-button">
                             <span>Clean Intros (if you used old plugin)</span>
                         </button>
-                        
+
                     </div>
                     <div class="inputContainer">
                         <label class="inputLabel inputLabelUnfocused" for="ruleSelection">Rule Type</label>
@@ -80,7 +86,7 @@
                         <input id="rulePrecedence" is="emby-input" type="number" value="1" min="1" name="rulePrecedence" />
                         <div class="fieldDescription">How important is the rule. If multiple rules both apply, only the ones with the highest equal precendence will be used for calculations.</div>
                     </div>
-                    
+
                     <div class="inputContainer">
                         <button id="addRuleBtn" is="emby-button" type="button" class="raised button-submit block emby-button">
                             <span>Add</span>
@@ -115,24 +121,24 @@
                         </thead>
                         <tbody class="resultBody" id="ruleTable">
                             <!-- <tr class="detailTableBodyRow detailTableBodyRow-shaded">
-                                <td class="detailTableBodyCell">
-                                    <button type="button" is="emby-button" data-token="b3d721993ac24ee6a52b0d842d9b3d9f" class="raised raised-mini btnRevoke emby-button" data-mini="true" title="Revoke" style="margin:0;">
-                                        Remove
-                                    </button>
-                                </td>
-                                <td class="detailTableBodyCell" style="vertical-align:middle;">
-                                    Tag
-                                </td>
-                                <td class="detailTableBodyCell" style="vertical-align:middle;">
-                                    Main
-                                </td>
-                                <td class="detailTableBodyCell" style="vertical-align:middle;">
-                                    1
-                                </td>
-                                <td class="detailTableBodyCell" style="vertical-align:middle;">
-                                    50
-                                </td>
-                            </tr> -->
+                <td class="detailTableBodyCell">
+                    <button type="button" is="emby-button" data-token="b3d721993ac24ee6a52b0d842d9b3d9f" class="raised raised-mini btnRevoke emby-button" data-mini="true" title="Revoke" style="margin:0;">
+                        Remove
+                    </button>
+                </td>
+                <td class="detailTableBodyCell" style="vertical-align:middle;">
+                    Tag
+                </td>
+                <td class="detailTableBodyCell" style="vertical-align:middle;">
+                    Main
+                </td>
+                <td class="detailTableBodyCell" style="vertical-align:middle;">
+                    1
+                </td>
+                <td class="detailTableBodyCell" style="vertical-align:middle;">
+                    50
+                </td>
+            </tr> -->
                         </tbody>
                     </table>
 
@@ -158,7 +164,8 @@
                     DefaultLocalVideos: [],
                     TagIntros: [], 
                     GenreIntros: [],
-                    StudioIntros: []
+                    StudioIntros: [],
+                    IntrosForMoviesOnly: false
                 };
 
                 var loadPage = () => {
@@ -175,6 +182,7 @@
                     ]).then(([genreItems, studioItems, config]) => {
                         localIntroConfig = config;
 
+                        document.querySelector('#introsForMoviesOnly').checked = localIntroConfig.IntrosForMoviesOnly;
 
                         $('#local').val(config.Local);
                         
@@ -448,6 +456,8 @@
                 });
 
                 document.querySelector('#configForm').addEventListener('submit', function (event) {
+                    localIntroConfig.IntrosForMoviesOnly = document.querySelector('#introsForMoviesOnly').checked;
+
                     Dashboard.showLoadingMsg();
 
                     saveChanges().then(function (result) {

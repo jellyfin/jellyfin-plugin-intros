@@ -80,6 +80,9 @@ public class IntroProvider : IIntroProvider
 
     private IEnumerable<IntroInfo> Local(BaseItem item)
     {
+        if (LocalIntrosPlugin.Instance.Configuration.IntrosForMoviesOnly && item.GetBaseItemKind() != Data.Enums.BaseItemKind.Movie)
+            return Enumerable.Empty<IntroInfo>();
+
         if (!File.Exists(introsPath) && !Directory.Exists(introsPath))
         {
             throw new Exception("No intros found in local path");
