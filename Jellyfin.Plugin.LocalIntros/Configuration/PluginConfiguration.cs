@@ -18,6 +18,7 @@ public class IntroPluginConfiguration : BasePluginConfiguration
     public List<DateRangeIntro> CurrentDateIntros { get; set; } = new List<DateRangeIntro>();
     public List<DateRangeIntro> PremiereDateIntros { get; set; } = new List<DateRangeIntro>();
 
+    public bool IntrosForMoviesOnly { get; set; } = false;
 }
 
 public class IntroVideo
