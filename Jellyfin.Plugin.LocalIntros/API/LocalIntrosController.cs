@@ -173,12 +173,13 @@ public class LocalIntrosController : ControllerBase
             if (inLibrary.Count() == 0)
             {
                 logger.LogInformation($"No existing items in library, erasing configuration.");
-                LocalIntrosPlugin.Instance.Configuration.CurrentDateIntros = new List<CurrentDateRangeIntro>();
-                LocalIntrosPlugin.Instance.Configuration.DefaultLocalVideos = new List<Guid>();
-                LocalIntrosPlugin.Instance.Configuration.DetectedLocalVideos = new List<IntroVideo>();
-                LocalIntrosPlugin.Instance.Configuration.GenreIntros = new List<GenreIntro>();
-                LocalIntrosPlugin.Instance.Configuration.StudioIntros = new List<StudioIntro>();
-                LocalIntrosPlugin.Instance.Configuration.TagIntros = new List<TagIntro>();
+                LocalIntrosPlugin.Instance.Configuration.CurrentDateIntros = new ();
+                LocalIntrosPlugin.Instance.Configuration.PremiereDateIntros = new ();
+                LocalIntrosPlugin.Instance.Configuration.DefaultLocalVideos = new ();
+                LocalIntrosPlugin.Instance.Configuration.DetectedLocalVideos = new ();
+                LocalIntrosPlugin.Instance.Configuration.GenreIntros = new ();
+                LocalIntrosPlugin.Instance.Configuration.StudioIntros = new ();
+                LocalIntrosPlugin.Instance.Configuration.TagIntros = new ();
                 
                 UpdateOptionsConfig(libraryResults.Values);
             }
@@ -223,6 +224,7 @@ public class LocalIntrosController : ControllerBase
         CleanList(LocalIntrosPlugin.Instance.Configuration.TagIntros, validIds);
         CleanList(LocalIntrosPlugin.Instance.Configuration.GenreIntros, validIds);
         CleanList(LocalIntrosPlugin.Instance.Configuration.CurrentDateIntros, validIds);
+        CleanList(LocalIntrosPlugin.Instance.Configuration.PremiereDateIntros, validIds);
         
         logger.LogTrace($"Checking to see if there are any configured videos...");
         if (LocalIntrosPlugin.Instance.Configuration.DefaultLocalVideos.Count + LocalIntrosPlugin.Instance.Configuration.StudioIntros.Count + LocalIntrosPlugin.Instance.Configuration.TagIntros.Count + LocalIntrosPlugin.Instance.Configuration.GenreIntros.Count == 0)
