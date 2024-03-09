@@ -46,14 +46,6 @@
         "sourceUrl": "https://github.com/BrianCArnold/jellyfin-plugin-intros/releases/download/v2.2.0.100/jellyfin-plugin-intros-v2.2.0.100.zip",
         "checksum": "949542ab07d3d51d918d194aac121a66",
         "timestamp": "2023-05-22T00:00:00Z"
-      },
-      {
-        "version": "2.3.0.0",
-        "changelog": "Added ability to only show Intros for Movies",
-        "targetAbi": "10.8.0.0",
-        "sourceUrl": "https://github.com/Terence-D/jellyfin-plugin-intros/releases/download/v2.3.0.0/jellyfin-plugin-intros-v2.3.0.0.zip",
-        "checksum": "bb6182cd6e39a6644f14f9eb2def06d5",
-        "timestamp": "2024-02-08T00:00:00Z"
       }
     ]
   }
