@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Jellyfin.Plugin.LocalIntros.Configuration;
+using MediaBrowser.Common.Api;
 using MediaBrowser.Controller.Library;
 using Microsoft.Extensions.Logging;
 
@@ -16,7 +17,7 @@ namespace Jellyfin.Plugin.LocalIntros;
 
 
 [ApiController]
-[Authorize(Policy = "RequiresElevation")]
+[Authorize(Policy = Policies.RequiresElevation)]
 [Route("[controller]")]
 [Produces(MediaTypeNames.Application.Json)]
 public class LocalIntrosController : ControllerBase
@@ -54,7 +55,7 @@ public class LocalIntrosController : ControllerBase
         PopulateIntroLibrary();
         return Ok();
     }
-    
+
     [HttpPost("ClearIntros")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -67,7 +68,7 @@ public class LocalIntrosController : ControllerBase
             {
                 {"prerolls.video", ""}
             }
-        }).Items.ToList().ForEach(x => 
+        }).Items.ToList().ForEach(x =>
         {
             logger.LogInformation($"Removing {x.Path} from library.");
             LocalIntrosPlugin.LibraryManager.DeleteItem(x, new DeleteOptions());
@@ -114,7 +115,7 @@ public class LocalIntrosController : ControllerBase
             logger.LogInformation($"Retrieving file at {introsPath}");
             filesOnDisk = new FancyList<string> { introsPath };
         }
-        else 
+        else
         {
             throw new DirectoryNotFoundException($"Directory Not Found: {introsPath}. Please check your configuration.");
         }
@@ -136,7 +137,7 @@ public class LocalIntrosController : ControllerBase
                     needsConfigUpdate = true;
                 }
             }
-            else 
+            else
             {
                 logger.LogInformation($"Adding {file} to library and adding to results.");
                 var video = new Video
@@ -180,10 +181,10 @@ public class LocalIntrosController : ControllerBase
                 LocalIntrosPlugin.Instance.Configuration.GenreIntros = new ();
                 LocalIntrosPlugin.Instance.Configuration.StudioIntros = new ();
                 LocalIntrosPlugin.Instance.Configuration.TagIntros = new ();
-                
+
                 UpdateOptionsConfig(libraryResults.Values);
             }
-            if (needsConfigUpdate) 
+            if (needsConfigUpdate)
             {
                 logger.LogInformation($"Updating configuration file.");
                 UpdateOptionsConfig(libraryResults.Values);
@@ -196,12 +197,12 @@ public class LocalIntrosController : ControllerBase
         }
         return libraryResults;
     }
-    
+
     private void CleanList(ICollection<Guid> listToClean, HashSet<Guid> existingItems)
     {
         listToClean.Where(x => !existingItems.Contains(x)).ToList().ForEach(x => listToClean.Remove(x));
     }
-    
+
     private void CleanList<TIntro>(List<TIntro> listToClean, HashSet<Guid> existingItems)
         where TIntro : ISpecialIntro
     {
@@ -216,23 +217,23 @@ public class LocalIntrosController : ControllerBase
             ItemId = x.Id,
             Name = x.Name
         }).ToList();
-        
+
         var validIds = LocalIntrosPlugin.Instance.Configuration.DetectedLocalVideos.Select(x => x.ItemId).ToHashSet();
-        
+
         CleanList(LocalIntrosPlugin.Instance.Configuration.DefaultLocalVideos, validIds);
         CleanList(LocalIntrosPlugin.Instance.Configuration.StudioIntros, validIds);
         CleanList(LocalIntrosPlugin.Instance.Configuration.TagIntros, validIds);
         CleanList(LocalIntrosPlugin.Instance.Configuration.GenreIntros, validIds);
         CleanList(LocalIntrosPlugin.Instance.Configuration.CurrentDateIntros, validIds);
         CleanList(LocalIntrosPlugin.Instance.Configuration.PremiereDateIntros, validIds);
-        
+
         logger.LogTrace($"Checking to see if there are any configured videos...");
         if (LocalIntrosPlugin.Instance.Configuration.DefaultLocalVideos.Count + LocalIntrosPlugin.Instance.Configuration.StudioIntros.Count + LocalIntrosPlugin.Instance.Configuration.TagIntros.Count + LocalIntrosPlugin.Instance.Configuration.GenreIntros.Count == 0)
         {
             logger.LogInformation($"No configured videos found, adding first video to default.");
             LocalIntrosPlugin.Instance.Configuration.DefaultLocalVideos.Add(libraryResults.First().Id);
         }
-        
+
         //And then to the List as we need for saving. (XML can't serialize Dictionaries..)
         LocalIntrosPlugin.Instance.SaveConfiguration();
     }
