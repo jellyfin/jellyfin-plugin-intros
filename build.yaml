@@ -1,20 +1,24 @@
 name: 'Local Intros'
 guid: '07d86795-01f2-4d22-b174-cdc6056c3e7c'
-version: '2'
+version: 3
 targetAbi: '10.9.0.0'
 framework: 'net8.0'
 owner: 'Jellyfin'
 overview: 'Display flashy intros before movies and other videos'
 description: >
-  Select a flashy pre-roll from local storage to run before any
-  video content. The video details are loaded from disk after a video
-  is played from the library from the beginning of the video.
-  A random video is selected, and all videos in the local directory
-  are enabled by default. Specific videos can be enabled or disabled
-  as necessary. After videos are loaded for the first time, additional
-  videos found in the directory are not enabled by default.
+  Select a flashy pre-roll from local storage to run before any video content. The video details are loaded from disk after a video is played from the library from the beginning of the video. A random video is selected, and all videos in the local directory are enabled by default. Specific videos can be enabled or disabled as necessary. After videos are loaded for the first time, additional videos found in the directory are not enabled by default.
+
 category: 'Other'
 artifacts:
-- 'Jellyfin.Plugin.LocalIntros.dll'
-changelog: >
-  Disabled Vimeo loading entirely, only plays back local videos.
+  - 'Jellyfin.Plugin.LocalIntros.dll'
+changelog: |-
+  - 10.9 (#38) @crobibero
+  - Add org workflows (#29) @crobibero
+  - Added code to order detected videos by name. (#16) @BrianCArnold
+
+  ### New features and improvements ###
+  - added ability to only show intros for movies (#32) @Terence-D
+  - Added code to handle repeating date ranges in backend.  (#15) @BrianCArnold
+
+  ### Documentation updates ###
+  - Update config Discord link (#31) @anthonylavado
