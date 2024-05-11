@@ -1,15 +1,15 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
+    <TargetFramework>net8.0</TargetFramework>
     <RootNamespace>Jellyfin.Plugin.LocalIntros</RootNamespace>
     <AssemblyVersion>2.2.0.100</AssemblyVersion>
     <FileVersion>2.2.0.100</FileVersion>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Jellyfin.Controller" Version="10.*" />
-    <PackageReference Include="Jellyfin.Model" Version="10.*" />
+    <PackageReference Include="Jellyfin.Controller" Version="10.*-*" />
+    <PackageReference Include="Jellyfin.Model" Version="10.*-*" />
   </ItemGroup>
 
   <ItemGroup>
