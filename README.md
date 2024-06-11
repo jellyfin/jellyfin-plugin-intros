@@ -17,7 +17,7 @@
 
 ## About
 
-Plugin to automatically extract embedded subtitles.
+Plugin that enables the use of pre-roll intro videos from local storage.
 
 ## Installation
 
