@@ -17,7 +17,7 @@
 
 ## About
 
-Plugin to provide intros from local files
+Plugin that enables the use of pre-roll intro videos from local storage.
 
 ## Installation
 
