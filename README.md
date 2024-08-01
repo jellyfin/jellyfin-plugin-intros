@@ -17,7 +17,7 @@
 
 ## About
 
-Plugin to automatically extract embedded subtitles.
+Plugin for providing local intros
 
 ## Installation
 
