@@ -1,6 +1,6 @@
 name: 'Local Intros'
 guid: '07d86795-01f2-4d22-b174-cdc6056c3e7c'
-version: 3
+version: 4
 targetAbi: '10.11.0.0'
 framework: 'net9.0'
 owner: 'Jellyfin'
@@ -12,13 +12,5 @@ category: 'MoviesAndShows'
 artifacts:
   - 'Jellyfin.Plugin.LocalIntros.dll'
 changelog: |-
-  - 10.9 (#38) @crobibero
-  - Add org workflows (#29) @crobibero
-  - Added code to order detected videos by name. (#16) @BrianCArnold
-
-  ### New features and improvements ###
-  - added ability to only show intros for movies (#32) @Terence-D
-  - Added code to handle repeating date ranges in backend.  (#15) @BrianCArnold
-
-  ### Documentation updates ###
-  - Update config Discord link (#31) @anthonylavado
+  - Jellyfin 10.11 support (#51) @crobibero
+  - Update README.md (#41) @lukasitaly
