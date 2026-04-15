@@ -1,0 +1,20 @@
+[
+  {
+    "guid": "07d86795-01f2-4d22-b174-cdc6056c3e7c",
+    "name": "Local Intros",
+    "overview": "Display flashy intros before movies and other videos",
+    "description": "Select a flashy pre-roll from local storage to run before any video content. The video details are loaded from disk after a video is played from the library from the beginning of the video. A random video is selected, and all videos in the local directory are enabled by default. Specific videos can be enabled or disabled as necessary. After videos are loaded for the first time, additional videos found in the directory are not enabled by default.",
+    "owner": "brunobeeee",
+    "category": "Other",
+    "versions": [
+      {
+        "version": "2.2.0.100",
+        "changelog": "- Initial build pipeline release",
+        "targetAbi": "10.11.0.0",
+        "sourceUrl": "https://github.com/brunobeeee/jellyfin-plugin-intros/releases/download/v2.2.0.100/Jellyfin.Plugin.LocalIntros.zip",
+        "checksum": "",
+        "timestamp": "2024-01-01T00:00:00Z"
+      }
+    ]
+  }
+]

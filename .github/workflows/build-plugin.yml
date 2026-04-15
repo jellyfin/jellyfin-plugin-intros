@@ -1,0 +1,50 @@
+name: Build Plugin Pipeline
+
+on:
+  push:
+    branches:
+      - main
+      - master
+    tags:
+      - 'v*'
+  pull_request:
+
+jobs:
+  build:
+    name: Build Plugin
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup .NET 9.0
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '9.0.x'
+
+      - name: Restore Dependencies
+        run: dotnet restore
+
+      - name: Build Plugin
+        run: dotnet publish --configuration Release --output bin
+
+      - name: Upload DLL Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: Jellyfin.Plugin.LocalIntros
+          path: bin/Jellyfin.Plugin.LocalIntros.dll
+
+      - name: Create Zip for Release
+        if: startsWith(github.ref, 'refs/tags/v')
+        run: |
+          cd bin
+          zip -r Jellyfin.Plugin.LocalIntros.zip Jellyfin.Plugin.LocalIntros.dll
+
+      - name: Publish Release
+        if: startsWith(github.ref, 'refs/tags/v')
+        uses: softprops/action-gh-release@v2
+        with:
+          files: bin/Jellyfin.Plugin.LocalIntros.zip
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
