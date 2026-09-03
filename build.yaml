@@ -1,7 +1,7 @@
 name: 'Local Intros'
 guid: '07d86795-01f2-4d22-b174-cdc6056c3e7c'
-version: 4
-targetAbi: '10.11.0.0'
+version: 5
+targetAbi: '12.0.0.0'
 framework: 'net9.0'
 owner: 'Jellyfin'
 overview: 'Display flashy intros before movies and other videos'
@@ -12,5 +12,4 @@ category: 'MoviesAndShows'
 artifacts:
   - 'Jellyfin.Plugin.LocalIntros.dll'
 changelog: |-
-  - Jellyfin 10.11 support (#51) @crobibero
-  - Update README.md (#41) @lukasitaly
+  - Update link to Pre-rolls Community website (#56) @klaxusnexus, @crobibero
