@@ -51,6 +51,22 @@ public class LocalIntrosController : ControllerBase
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public IActionResult LoadIntros()
     {
+        return LoadIntrosFromPath(introsPath);
+    }
+
+    internal IActionResult LoadIntrosFromPath(string path)
+    {
+        if (string.IsNullOrWhiteSpace(path) || (!System.IO.File.Exists(path) && !Directory.Exists(path)))
+        {
+            logger.LogWarning("Configured intro path does not exist or is inaccessible: {Path}", path);
+            return BadRequest(new ProblemDetails
+            {
+                Title = "Invalid intro path",
+                Detail = $"The intro path '{path}' does not exist or is inaccessible on the Jellyfin server.",
+                Status = StatusCodes.Status400BadRequest
+            });
+        }
+
         logger.LogDebug("Loading Intros");
         PopulateIntroLibrary();
         return Ok();

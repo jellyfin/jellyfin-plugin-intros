@@ -15,6 +15,7 @@
   <ItemGroup>
     <None Remove="Configuration\config.html" />
     <EmbeddedResource Include="Configuration\config.html" />
+    <InternalsVisibleTo Include="Jellyfin.Plugin.LocalIntros.Tests" />
   </ItemGroup>
 
 </Project>
