@@ -21,6 +21,7 @@
                         <label class="inputLabel inputLabelUnfocused" for="local">Local Source</label>
                         <input id="local" is="emby-input" placeholder="/media/intros" />
                         <div class="fieldDescription">Location of intro videos</div>
+                        <div id="localPathError" class="fieldDescription" role="alert" style="display: none;"></div>
                     </div>
                     <div class="inputContainer">
                         <button id="loadVideosBtn" is="emby-button" type="button" class="raised button-submit block emby-button">
@@ -224,7 +225,19 @@
                 var loadVideos = () => {
                     let url = ApiClient.getUrl('LocalIntros/LoadIntros');
                     let data = {};
-                    ApiClient.ajax({ type: 'POST', url, data, contentType: 'application/json' }).then(() => {loadPage()}).catch(ev => alert(ev));
+                    $('#localPathError').hide();
+                    ApiClient.ajax({ type: 'POST', url, data, contentType: 'application/json' }).then(() => {loadPage()}).catch(async error => {
+                        let message = 'Could not load intros. Check that the local source exists on the server.';
+                        try {
+                            const response = typeof error?.json === 'function'
+                                ? await error.json()
+                                : error?.responseJSON || JSON.parse(error?.responseText);
+                            message = response?.detail || message;
+                        } catch (_) {
+                            // Keep the actionable fallback if the response is not JSON.
+                        }
+                        $('#localPathError').text(message).show();
+                    });
                 }
 
                 var clearIntros = () => {
@@ -420,6 +433,7 @@
 
                 $('#local').change(ev => {
                     localIntroConfig.Local = $('#local').val();
+                    $('#localPathError').hide();
                 });
 
                 $('#addAllBtn').click(ev => {
